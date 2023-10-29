@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useState } from "react";
-import ImageModal from "@/app/components/modals/ImageModal";
+import ImageModal from "@/app/conversations/[conversationId]/components/ImageModal";
 
 interface MessageBoxProps {
   isLast?: boolean;
@@ -46,7 +46,11 @@ const MessageBox: React.FC<MessageBoxProps> = ({ isLast, data }) => {
           </div>
         </div>
         <div className={message}>
-          <ImageModal src={data.image} isOpen={isImageModalOpen} onClose={() => setIsImageModalOpen(false)} />
+          <ImageModal
+            src={data.image}
+            isOpen={isImageModalOpen}
+            onClose={() => setIsImageModalOpen(false)}
+          />
           {data.image ? (
             <Image
               onClick={() => setIsImageModalOpen(true)}

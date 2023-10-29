@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import LoadingModal from "@/app/components/modals/LoadingModal";
 
 type Variant = "LOGIN" | "REGISTER";
 
@@ -84,11 +85,11 @@ const AuthForm = () => {
     setIsLoading(true);
     signIn(action, { redirect: false })
       .then((callback) => {
-        console.log(callback, "callback");
         if (callback?.error) {
           toast.error(callback.error);
         }
         if (callback?.ok) {
+          router.push("/users");
           toast.success("Logged in successfully");
         }
       })

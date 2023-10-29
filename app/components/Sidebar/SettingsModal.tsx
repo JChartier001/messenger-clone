@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { User } from "@prisma/client";
-import Modal from "./Modal";
+import Modal from "../modals/Modal";
 import { useRouter } from "next/navigation";
 import { CldUploadButton } from "next-cloudinary";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";

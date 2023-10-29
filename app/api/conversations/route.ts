@@ -8,7 +8,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { userId, isGroup, members, name } = body;
 
-
     if (!currentUser?.id || !currentUser?.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -24,7 +23,9 @@ export async function POST(request: Request) {
           isGroup,
           users: {
             connect: [
-              ...members.map((member: {label:string, value: string}) => ({ id: member.value })),
+              ...members.map((member: { label: string; value: string }) => ({
+                id: member.value,
+              })),
               { id: currentUser.id },
             ],
           },
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newConversation);
   } catch (error: any) {
-    console.log(error, "CREATE CHAT ERROR")
+    console.log(error, "CREATE CHAT ERROR");
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
