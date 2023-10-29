@@ -58,7 +58,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({ isLast, data }) => {
         </div>
       </div>
       {isLast && (
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-gray-500 font-light">
           {seenList ? `Seen by ${seenList}` : "Sent"}
         </div>
       )}
