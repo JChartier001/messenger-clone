@@ -1,31 +1,35 @@
-'use client'
-import React from 'react';
-import clsx from 'clsx';
-import Link from 'next/link';
-import { DecimalJsLike } from '@prisma/client/runtime/library';
+"use client";
+import React from "react";
+import clsx from "clsx";
+import Link from "next/link";
+import { DecimalJsLike } from "@prisma/client/runtime/library";
 
-interface DesktopItemProps { 
-  href: string
-  icon: any
-  label: string
-  active?: boolean
-  onClick?: () => void
-
+interface DesktopItemProps {
+  href: string;
+  icon: any;
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
 }
 
-const DesktopItem: React.FC<DesktopItemProps> = ({ href, icon: Icon, label, active, onClick }) => {
-  
+const DesktopItem: React.FC<DesktopItemProps> = ({
+  href,
+  icon: Icon,
+  label,
+  active,
+  onClick,
+}) => {
   const handleClick = () => {
     if (onClick) {
-      return onClick()
+      return onClick();
     }
-  }
+  };
 
   return (
-		<li onClick={handleClick}>
-			<Link
-				className={clsx(
-					`
+    <li onClick={handleClick}>
+      <Link
+        className={clsx(
+          `
             group 
             flex 
             gap-x-3 
@@ -38,15 +42,15 @@ const DesktopItem: React.FC<DesktopItemProps> = ({ href, icon: Icon, label, acti
             hover:text-black 
             hover:bg-gray-100
           `,
-					active && 'bg-gray-100 text-black'
-				)}
-				href={href}
-			>
-				<Icon className='h-6 w-6 shrink-0' />
-				<span className='sr-only'>{label}</span>
-			</Link>
-		</li>
-	);
-}
+          active && "bg-gray-100 text-black",
+        )}
+        href={href}
+      >
+        <Icon className="h-6 w-6 shrink-0" />
+        <span className="sr-only">{label}</span>
+      </Link>
+    </li>
+  );
+};
 
-export default DesktopItem
+export default DesktopItem;

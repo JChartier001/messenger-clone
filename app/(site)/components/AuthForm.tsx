@@ -6,8 +6,8 @@ import Button from "@/app/components/Button";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import axios from "axios";
-import { toast } from 'react-hot-toast';
-import {signIn, useSession} from "next-auth/react";
+import { toast } from "react-hot-toast";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 type Variant = "LOGIN" | "REGISTER";
@@ -20,7 +20,7 @@ const AuthForm = () => {
 
   useEffect(() => {
     if (session?.status === "authenticated") {
-     router.push('/users')
+      router.push("/users");
     }
   }, [session?.status, router]);
 
@@ -47,40 +47,54 @@ const AuthForm = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     if (variant === "REGISTER") {
-      axios.post("/api/register", data).then(() => {
-        signIn('credentials', data)
-        toast.success("Registered successfully")
-      }).catch(err => {
-        toast.error("Something went wrong")
-      }).finally(() => { setIsLoading(false)})
+      axios
+        .post("/api/register", data)
+        .then(() => {
+          signIn("credentials", data);
+          toast.success("Registered successfully");
+        })
+        .catch((err) => {
+          toast.error("Something went wrong");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
     if (variant === "LOGIN") {
-      signIn("credentials", { ...data, redirect: false }).then(callback => {
-        if (callback?.error) {
-          toast.error(callback.error)
-        }
-        if (callback?.ok) {
-          router.push('/users');
-          toast.success("Logged in successfully")
-        }
-      }).catch(err => {
-        toast.error(err)
-      } ).finally(() => { setIsLoading(false)})
+      signIn("credentials", { ...data, redirect: false })
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error(callback.error);
+          }
+          if (callback?.ok) {
+            router.push("/users");
+            toast.success("Logged in successfully");
+          }
+        })
+        .catch((err) => {
+          toast.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
-   
   };
 
   const socialAction = (action: string) => {
     setIsLoading(true);
-    signIn(action, { redirect: false }).then(callback => {
-      console.log(callback, "callback")
-      if (callback?.error) {
-        toast.error(callback.error)
-      }
-      if (callback?.ok) {
-        toast.success("Logged in successfully")
-      }
-    }).finally(() => { setIsLoading(false)})
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        console.log(callback, "callback");
+        if (callback?.error) {
+          toast.error(callback.error);
+        }
+        if (callback?.ok) {
+          toast.success("Logged in successfully");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
