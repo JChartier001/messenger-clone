@@ -3,7 +3,7 @@ import { FullConversationType } from "@/app/types";
 
 import React, { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Conversation, Message, User } from "@prisma/client";
+
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
@@ -52,11 +52,6 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       return lastMessage.body;
     }
     return "Started a conversation";
-  }, [lastMessage]);
-
-  const lastMessageDate = useMemo(() => {
-    if (!lastMessage) return "";
-    return format(new Date(lastMessage.createdAt), "dd/MM/yyyy");
   }, [lastMessage]);
 
   return (
@@ -108,7 +103,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
               truncate 
               text-sm
               `,
-              hasSeen ? "text-gray-500" : "text-black font-medium",
+              hasSeen ? "text-gray-500" : "text-black font-bold",
             )}
           >
             {lastMessageText}
