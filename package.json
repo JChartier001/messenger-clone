@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format:fix": "yarn prettier . --write",
+    "formatting:fix": "prettier --write .",
+    "typescript": "tsc --noEmit",
+    "verify": "yarn formatting:fix && yarn lint && yarn typescript",
     "postinstall": "prisma generate"
   },
   "dependencies": {
