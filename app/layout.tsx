@@ -2,6 +2,7 @@ import "./globals.css";
 import AuthContext from "./context/AuthContext";
 import ActiveStatus from "./components/ActiveStatus";
 import ToasterContext from "./context/ToasterContext";
+import ThemeProvider from "@/providers/ThemeProvider";
 
 export const metadata = {
   title: "Messenger",
@@ -14,14 +15,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <AuthContext>
-          <ToasterContext />
-          <ActiveStatus />
-          {children}
-        </AuthContext>
-      </body>
-    </html>
-  );
+		<html lang='en'>
+			<body>
+				<ThemeProvider>
+					<AuthContext>
+						<ToasterContext />
+						<ActiveStatus />
+						{children}
+					</AuthContext>
+				</ThemeProvider>
+			</body>
+		</html>
+	);
 }

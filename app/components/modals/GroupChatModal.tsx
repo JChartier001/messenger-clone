@@ -7,9 +7,9 @@ import Modal from "./Modal";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Input from "../inputs/Input";
+import {Input} from "@/app/components/ui/Input";
 import Select from "../inputs/Select";
-import Button from "../Button";
+import {Button} from "@/app/components/ui/Button";
 
 interface GroupChatModalProps {
   isOpen: boolean;

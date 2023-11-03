@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { IoTrash } from "react-icons/io5";
 import { FiAlertTriangle } from "react-icons/fi";
 import { Dialog } from "@headlessui/react";
-import Button from "@/app/components/Button";
+import {Button} from "@/app/components/ui/Button";
 
 interface ConfirmModalProps {
   isOpen: boolean;

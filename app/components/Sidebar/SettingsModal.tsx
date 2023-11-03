@@ -8,8 +8,8 @@ import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import Input from "../inputs/Input";
-import Button from "../Button";
+import {Input} from "@/app/components/ui/Input";
+import {Button} from "@/app/components/ui/Button";
 
 interface SettingsModalProps {
   isOpen: boolean;
