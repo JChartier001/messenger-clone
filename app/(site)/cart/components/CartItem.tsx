@@ -2,10 +2,10 @@ import Image from 'next/image';
 import { X } from 'lucide-react';
 import FarmLogo from '@/components/FarmLogo';
 
-import IconButton from '@/components/ui/IconButton';
-import Currency from '@/components/ui/currency';
-import useCart from '@/hooks/use-cart';
-import { Item } from '@/types';
+import IconButton from '@/app/components/ui/IconButton';
+import Currency from '@/app/components/Currency';
+import useCart from '@/app/hooks/useCart';
+import { Item } from '@/app/types';
 
 interface CartItemProps {
   data: Item;
