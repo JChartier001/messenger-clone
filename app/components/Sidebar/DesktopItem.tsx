@@ -2,7 +2,7 @@
 import React from "react";
 import clsx from "clsx";
 import Link from "next/link";
-import { DecimalJsLike } from "@prisma/client/runtime/library";
+
 
 interface DesktopItemProps {
   href: string;
