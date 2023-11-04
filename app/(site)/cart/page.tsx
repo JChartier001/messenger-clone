@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { MoveLeft } from 'lucide-react';
 
-import Container from '@/components/ui/container';
-import useCart from '@/hooks/use-cart';
+import Container from '@/app/components/ui/Container';
+import useCart from '@/app/hooks/useCart';
 
 import Summary from './components/summary';
 import CartItem from './components/CartItem';

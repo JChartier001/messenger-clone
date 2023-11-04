@@ -1,8 +1,8 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { FarmLogoType } from '@/types';
-import cn from 'classnames';
-import Rating from '@/components/ui/Rating';
+import { FarmLogoType } from '@/app/types';
+import {cn} from '@/app/libs/utils';
+import Rating from '@/app/components/Rating';
 
 const FarmLogo = ({
   farm,

@@ -1,16 +1,16 @@
 'use client';
 
 import { ShoppingCart } from 'lucide-react';
-import FarmLogo from '@/components/FarmLogo';
-import Rating from '@/components/ui/Rating';
-import FavShareGroup from '@/components/ui/FavShareGroup';
+import FarmLogo from '@/app/components/FarmLogo';
+import Rating from '@/app/components/Rating';
+import FavShareGroup from '@/app/components/FavShareGroup';
 
-import Currency from '@/components/ui/currency';
-import { Button } from '@/components/ui/button';
-import { Item, FarmLogoType } from '@/types';
+import Currency from '@/app/components/Currency';
+import  Button from '@/app/components/ui/Button';
+import { Item, FarmLogoType } from '@/app/types';
 import { MouseEventHandler } from 'react';
-import useCart from '@/hooks/use-cart';
-import { Separator } from '@/components/ui/separator';
+import useCart from '@/app/hooks/useCart';
+import Separator from '@/app/components/ui/Separator';
 import Description from './Description';
 
 interface InfoProps {

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { useParams } from 'next/navigation';
-import ProductList from '@/components/ProductList';
+import ProductList from '@/app/components/ProductList';
 
 const FilterPage = () => {
   const params = useParams();
@@ -11,14 +11,14 @@ const FilterPage = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/products/category/${params.slug}/${params.filter}`)
+      .get(`/api/products/category/${params?.slug}/${params?.filter}`)
       .then((res) => {
         setProducts(res.data);
       })
       .catch((err: unknown) => {
         console.error(err);
       });
-  }, [params.slug]);
+  }, [params?.slug]);
 
   return <ProductList items={products} title={''} />;
 };

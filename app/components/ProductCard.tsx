@@ -7,12 +7,12 @@ import { useRouter } from 'next/navigation';
 import { MouseEventHandler } from 'react';
 import Currency from '@/app/components/Currency';
 import IconButton from '@/app/components/ui/IconButton';
-import usePreviewModal from '@/hooks/use-preview-modal';
-import useCart from '@/hooks/use-cart';
+import usePreviewModal from '@/app/hooks/usePreviewModal';
+import useCart from '@/app/hooks/useCart';
 
-import { Button } from '@/app/components/ui/Button';
+import Button  from '@/app/components/ui/Button';
 import { Item, Farm } from '@/app/types';
-import FarmLogo from '../FarmLogo';
+import FarmLogo from '@/app/components/FarmLogo';
 import Rating from '@/app/components/Rating';
 import FavShareGroup from '@/app/components/FavShareGroup';
 

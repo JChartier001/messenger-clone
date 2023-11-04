@@ -1,8 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ProductList from '@/components/ProductList';
-import Billboard from '@/components/ui/billboard';
+import ProductList from '@/app/components/ProductList';
+import Billboard from '@/app/components/ui/Billboard';
 
 const StorePage = () => {
   const [products, setProducts] = useState([]);

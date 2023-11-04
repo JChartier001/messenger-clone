@@ -1,5 +1,5 @@
 import React from 'react';
-import Billboard from '@/components/ui/billboard';
+import Billboard from '@/app/components/ui/Billboard';
 
 const StoreLayout = async ({
   children,
