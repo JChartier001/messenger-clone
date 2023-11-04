@@ -110,6 +110,7 @@ model Farm {
   phone          String   @default("")
   slug           String   @unique
 
+  label          UnitLabel[]
   certifications Certification[]
   products       Product[]
   order          Order[]
@@ -168,6 +169,9 @@ model Product {
   farmId           String         @db.ObjectId
   farm             Farm           @relation(fields: [farmId], references: [id], onDelete: Cascade)
 
+  labelId String    @db.ObjectId
+  label   UnitLabel @relation(fields: [labelId], references: [id])
+
   categoryId String   @db.ObjectId
   category   Category @relation(fields: [categoryId], references: [id])
 
@@ -178,13 +182,13 @@ model Product {
 }
 
 model Order {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  isPaid    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  phone     String   @default("")
-  address   String   @default("")
-  referenceId String @default("")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  isPaid      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  phone       String   @default("")
+  address     String   @default("")
+  referenceId String   @default("")
 
   farmId String @db.ObjectId
   farm   Farm   @relation(fields: [farmId], references: [id], onDelete: Cascade)
@@ -272,4 +276,17 @@ model CertificationType {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   Certification Certification[]
+}
+
+model UnitLabel {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  farmId    String    @db.ObjectId // Foreign Key to farm
+  farm      Farm      @relation(fields: [farmId], references: [id])
+  name      String
+  value     String
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([farmId])
 }

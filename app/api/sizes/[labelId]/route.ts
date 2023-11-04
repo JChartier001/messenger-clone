@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import prismadb from '@/app/libs/prismadb';
-import { auth } from '@clerk/nextjs';
-
+import getCurrentUser from '@/app/actions/getCurrentUser';
 export async function GET(
 	req: Request,
 	{ params }: { params: { labelId: string } }
@@ -30,9 +29,9 @@ export async function DELETE(
 	{ params }: { params: { labelId: string; farmId: string } }
 ) {
 	try {
-		const { userId } = auth();
+		const currentUser = await getCurrentUser();
 
-		if (!userId) {
+		if (!currentUser?.id || !currentUser?.email) {
 			return new NextResponse('Unauthenticated', { status: 403 });
 		}
 
@@ -43,7 +42,7 @@ export async function DELETE(
 		const farmByUserId = await prismadb.farm.findFirst({
 			where: {
 				id: params.farmId,
-				userId,
+				userId: currentUser.id,
 			},
 		});
 
@@ -69,13 +68,13 @@ export async function PATCH(
 	{ params }: { params: { labelId: string; farmId: string } }
 ) {
 	try {
-		const { userId } = auth();
+	const currentUser = await getCurrentUser();
 
 		const body = await req.json();
 
 		const { name, value } = body;
 
-		if (!userId) {
+		if (!currentUser?.id || !currentUser?.email) {
 			return new NextResponse('Unauthenticated', { status: 403 });
 		}
 
@@ -94,7 +93,7 @@ export async function PATCH(
 		const farmByUserId = await prismadb.farm.findFirst({
 			where: {
 				id: params.farmId,
-				userId,
+				userId: currentUser.id,
 			},
 		});
 

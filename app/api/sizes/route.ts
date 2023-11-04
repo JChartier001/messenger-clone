@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs';
+import getCurrentUser from '@/app/actions/getCurrentUser';
 
 import prismadb from '@/app/libs/prismadb';
 
@@ -8,13 +8,13 @@ export async function POST(
 	{ params }: { params: { farmId: string } }
 ) {
 	try {
-		const { userId } = auth();
+		const currentUser = await getCurrentUser();
 
 		const body = await req.json();
 
 		const { name, value } = body;
 
-		if (!userId) {
+		if (!currentUser?.id || !currentUser?.email) {
 			return new NextResponse('Unauthenticated', { status: 403 });
 		}
 
@@ -33,7 +33,7 @@ export async function POST(
 		const farmByUserId = await prismadb.farm.findFirst({
 			where: {
 				id: params.farmId,
-				userId,
+				userId:currentUser.id,
 			},
 		});
 
