@@ -10,7 +10,7 @@ const CertificationsPage = async ({
 }: {
   params: { farmId: string };
 }) => {
-  const certifications = await prismadb.certifications.findMany({
+  const certifications = await prismadb.certification.findMany({
     where: {
       farmId: params.farmId,
     },
@@ -21,6 +21,7 @@ const CertificationsPage = async ({
       createdAt: 'desc',
     },
   });
+
 
   const formattedCertifications: CertificationColumn[] = certifications.map(
     (item) => ({

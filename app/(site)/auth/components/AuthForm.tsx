@@ -10,7 +10,6 @@ import { toast } from 'react-hot-toast';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-
 type Variant = 'LOGIN' | 'REGISTER';
 
 const AuthForm = () => {
@@ -36,6 +35,7 @@ const AuthForm = () => {
 	const {
 		register,
 		handleSubmit,
+		watch,
 		formState: { errors },
 	} = useForm<FieldValues>({
 		defaultValues: {
@@ -45,13 +45,15 @@ const AuthForm = () => {
 		},
 	});
 
+	console.log(watch(), "data")
+
 	const onSubmit: SubmitHandler<FieldValues> = async data => {
 		setIsLoading(true);
 		if (variant === 'REGISTER') {
 			axios
 				.post('/api/register', data)
 				.then(() => {
-					signIn('credentials', data);
+					signIn('credentials', data)
 					toast.success('Registered successfully');
 				})
 				.catch(err => {
@@ -85,6 +87,7 @@ const AuthForm = () => {
 		setIsLoading(true);
 		signIn(action, { redirect: false })
 			.then(callback => {
+			
 				if (callback?.error) {
 					toast.error(callback.error);
 				}
@@ -129,7 +132,11 @@ const AuthForm = () => {
 						disabled={isLoading}
 					/>
 
-					<Button disabled={isLoading} type='submit' fullWidth>
+					<Button
+						disabled={isLoading}
+						type='submit'
+						fullWidth
+					>
 						{variant === 'LOGIN' ? 'Sign in' : 'Register'}
 					</Button>
 				</form>
@@ -140,7 +147,7 @@ const AuthForm = () => {
 						</div>
 
 						<div className='relative flex justify-center text-sm'>
-							<span className='px-2 bg-white dark:bg-[hsl(var(--background))] text-gray-400'>
+							<span className='px-2 bg-white bg-[hsl(var(--background))] text-gray-400'>
 								Or continue with
 							</span>
 						</div>
@@ -150,6 +157,7 @@ const AuthForm = () => {
 							icon={BsGithub}
 							onClick={() => socialAction('github')}
 							isLoading={isLoading}
+					
 						/>
 						<AuthSocialButton
 							icon={BsGoogle}

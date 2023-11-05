@@ -6,12 +6,14 @@ interface IconButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   icon: React.ReactElement;
   className?: string;
+  children?: React.ReactNode;
 }
 
 const IconButton: React.FC<IconButtonProps> = ({
   onClick,
   icon,
   className,
+  children
 }) => {
   return (
     <button
@@ -21,7 +23,7 @@ const IconButton: React.FC<IconButtonProps> = ({
         className
       )}
     >
-      {icon}
+      {icon || children}
     </button>
   );
 };

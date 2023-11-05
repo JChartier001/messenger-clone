@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { Check, ChevronsUpDown, PlusCircle, StoreIcon } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { cn } from '@/app/libs/utils';
+import  Button from '@/app/components/ui/ShadCNButton';
 import {
   Command,
   CommandEmpty,
@@ -13,13 +13,12 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@/components/ui/command';
+} from '@/app/components/ui/Command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { useFarmModal } from '@/hooks/use-farm-modal';
+} from '@/app/components/ui/Popover';
 import { useParams, useRouter } from 'next/navigation';
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
@@ -33,15 +32,16 @@ interface farmSwitcherProps extends PopoverTriggerProps {
 const FarmSwitcher = ({ className, items = [] }: farmSwitcherProps) => {
   const params = useParams();
   const router = useRouter();
-  const farmModal = useFarmModal();
   const formattedItems = items.map((item) => ({
     label: item.name,
     value: item.id,
   }));
 
   const currentFarm = formattedItems.find(
-    (item) => item.value === params.farmId
+    (item) => item.value === params?.farmId
   );
+
+  
   const [open, setOpen] = React.useState(false);
 
   const onFarmSelect = (farm: { value: string; label: string }) => {
@@ -55,7 +55,7 @@ const FarmSwitcher = ({ className, items = [] }: farmSwitcherProps) => {
         <Button
           variant='outline'
           size='sm'
-          role='combobox'
+          role="combobox"
           aria-expanded={open}
           aria-label='Select a farm'
           className={cn('w-[200px] justify-between', className)}

@@ -12,13 +12,18 @@ export async function POST(req: Request) {
       return new NextResponse("Missing fields", { status: 400 });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
-
+delete body.password;
     const user = await prisma.user.create({
       data: {
-        email,
-        name,
+        ...body,
         hashedPassword,
-      },
+        //   favorites: {
+        //     create: {
+        //       farmIds: [],
+        //       productIds: []
+        //     }
+        // },
+      }
     });
 
     return NextResponse.json(user);

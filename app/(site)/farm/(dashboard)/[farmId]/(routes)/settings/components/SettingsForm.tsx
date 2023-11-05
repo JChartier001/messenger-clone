@@ -3,51 +3,29 @@
 import * as z from 'zod';
 import axios from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useToast } from '@/components/ui/use-toast';
+import { FieldValues, useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
 import { Farm } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/libs/utils';
 
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Separator } from '@/components/ui/separator';
-import Heading from '@/components/ui/Heading';
-import AlertModal from '@/components/modals/AlertModal';
-import { Checkbox } from '@/components/ui/checkbox';
-import ImageUpload from '@/components/ui/ImageUpload';
+import Input  from '@/app/components/ui/Input';
+import TextArea, { Textarea } from '@/app/components/ui/TextArea';
+import Button from '@/app/components/ui/Button';
 
-const formSchema = z.object({
-  name: z.string().min(2),
-  address: z.string().min(2),
-  city: z.string().min(2),
-  state: z.string().min(2),
-  zip: z.string().min(5).max(5),
-  bio: z.string(),
-  policies: z.string(),
-  email: z.optional(z.string().email()),
-  phone: z.string(),
-  pickup: z.boolean(),
-  delivery: z.boolean(),
-  image: z.object({ url: z.string() }).array(),
-  logo: z.object({ url: z.string() }).array(),
-  pickupInfo: z.string(),
-  deliveryRadius: z.string(),
-});
+import Separator from '@/app/components/ui/Separator';
+import Heading from '@/app/components/ui/Heading';
+import AlertModal from '@/app/components/modals/AlertModal';
+import Checkbox  from '@/app/components/ui/Checkbox';
+import ImageUpload from '@/app/components/ui/ImageUpload';
+import LogoUpload from '@/app/components/ui/LogoUpload';
 
-type SettingsFormValues = z.infer<typeof formSchema>;
+
+
+
+
 
 interface SettingsFormProps {
   initialData: Farm | null;
@@ -56,7 +34,7 @@ interface SettingsFormProps {
 const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
-  const { toast } = useToast();
+
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -66,8 +44,8 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const toastMessage = initialData ? 'Farm updated.' : 'Farm created.';
   const action = initialData ? 'Save changes' : 'Create';
 
-  const form = useForm<SettingsFormValues>({
-    resolver: zodResolver(formSchema),
+  const {register, handleSubmit, formState: {errors}, watch, setValue} = useForm<FieldValues>({
+  
     defaultValues: initialData || {
       name: '',
       address: '',
@@ -80,18 +58,21 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       phone: '',
       pickup: false,
       delivery: false,
-      image: [],
-      logo: [],
+      image: null,
+      logo: null,
       pickupInfo: '',
       deliveryRadius: '',
     },
   });
 
-  const onSubmit = async (data: SettingsFormValues) => {
+  const image = watch('image')
+  const logo = watch('logo')
+
+  const onSubmit = async (data: FieldValues) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/farms/${params.farmId}`, data);
+        await axios.patch(`/api/farms/${params?.farmId}`, data);
       } else {
         const response = await axios.post('/api/farms', data);
 
@@ -99,26 +80,24 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       }
       router.refresh();
 
-      toast({ description: toastMessage, variant: 'success' });
+      toast.success(toastMessage);
     } catch (error: any) {
-      toast({ description: 'Something went wrong.', variant: 'destructive' });
+      toast.error('Something went wrong.');
     } finally {
       setLoading(false);
     }
   };
-
+console.log(watch())
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/farm/${params.farmId}`);
+      await axios.delete(`/api/farm/${params?.farmId}`);
       router.refresh();
       router.push('/farm');
-      toast({ description: 'Farm deleted.' });
+      toast.success('Farm deleted.');
     } catch (error: any) {
-      toast({
-        description: 'Make sure you removed all products and categories first.',
-        variant: 'destructive',
-      });
+      toast.error('Make sure you removed all products and categories first.'
+       );
     } finally {
       setLoading(false);
       setOpen(false);
@@ -126,324 +105,180 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   };
 
   return (
-    <>
-      <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onConfirm={onDelete}
-        loading={loading}
-      />
-      <div
-        className={cn(
-          ' items-center justify-between',
-          initialData ? 'flex' : 'hidden'
-        )}
-      >
-        <Heading title={title} description={description} />
-        <Button
-          disabled={loading}
-          variant='destructive'
-          size='sm'
-          onClick={() => setOpen(true)}
-        >
-          <Trash className='h-4 w-4' />
-        </Button>
-      </div>
-      <Separator />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='w-full space-y-8'
-        >
-          <div className='flex grid-cols-3 flex-col gap-8 md:grid'>
-            <FormField
-              control={form.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Farm Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder='Farm name'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='address'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder='Farm Address'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='city'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>City</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='City' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='state'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>State</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='State' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='zip'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Zip</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder='Zip Code'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='Email' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='phone'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
+		<>
+			<AlertModal
+				isOpen={open}
+				onClose={() => setOpen(false)}
+				onConfirm={onDelete}
+				loading={loading}
+			/>
+			<div
+				className={cn(
+					' items-center justify-between',
+					initialData ? 'flex' : 'hidden'
+				)}
+			>
+				<Heading title={title} description={description} />
+				<Button disabled={loading} onClick={() => setOpen(true)}>
+					<Trash className='h-4 w-4' />
+				</Button>
+			</div>
+			<Separator />
+			<form onSubmit={handleSubmit(onSubmit)} className='w-full space-y-8'>
+				<div className='flex grid-cols-2 flex-col gap-8 md:grid'>
+					<Input
+						id='name'
+						label='Farm Name'
+						register={register}
+						required
+						errors={errors}
+						disabled={loading}
+						placeholder='Name Your Agricultural Haven Here'
+					/>
+					<Input
+						disabled={loading}
+						label='Farm Address'
+						id='address'
+						errors={errors}
+						register={register}
+						required
+						placeholder="Indicate Your Homestead's Locale"
+					/>
+					<Input
+						disabled={loading}
+						label='City'
+						id='city'
+						required
+						register={register}
+						errors={errors}
+						placeholder="Indicate Your Farm's Hometown"
+					/>
+					<Input
+						disabled={loading}
+						label='State'
+						id='state'
+						required
+						register={register}
+						errors={errors}
+						placeholder='Indicate the Locale of Your Agrarian Haven'
+					/>
+					<Input
+						disabled={loading}
+						label='Zip Code'
+						id='zip'
+						required
+						register={register}
+						errors={errors}
+						placeholder="Drop in Your Farm's ZIP Code to Cultivate Connection"
+					/>
+					<Input
+						disabled={loading}
+						label='Email Address'
+						id='email'
+						required
+						register={register}
+						errors={errors}
+						placeholder="Drop your email address like it's hot"
+					/>
+					<Input
+						disabled={loading}
+						label='Phone Number'
+						id='phone'
+						required
+						register={register}
+						errors={errors}
+						placeholder='Drop Your Digits'
+					/>
+					<Checkbox
+						disabled={loading}
+						label='Customer Pickup'
+						id='pickup'
+						required
+						register={register}
+						errors={errors}
+						description='Embrace the rustic joy of direct farm-to-table service by allowing customers to collect their bounty straight from your fields'
+						// 'I would like to offer customer pickup for orders.'
+					/>
+					<Input
+						disabled={loading}
+						label='PickUp Hours'
+						id='pickupInfo'
+						required
+						register={register}
+						errors={errors}
+						className={watch('pickup') ? 'grid' : 'hidden'}
+						placeholder='8:00AM - 3:00PM'
+					/>
+					<Checkbox
+						disabled={loading}
+						label='Local Delivery'
+						id='delivery'
+						required
+						register={register}
+						errors={errors}
+						description=' Bring the Bounty of Your Farm Directly to their Doorstep '
+						// 'I would like to offer local delivery for orders.'
+					/>
+					<Input
+						disabled={loading}
+						label='Delivery Radius'
+						id='deliveryRadius'
+						required
+						register={register}
+						errors={errors}
+						className={watch('delivery') ? 'grid' : 'hidden'}
+						placeholder='Enter your local delivery radius in miles'
+					/>
+				</div>
+				<div className='grid grid-cols-2'>
+					<ImageUpload
+						label='Farm Image'
+						id='image'
+						register={register}
+						errors={errors}
+						disabled={loading}
+						
+					
+						value={image}
+						setValue={setValue}
+					/>
+					<ImageUpload
+						label='Farm Logo'
+						id='logo'
+						register={register}
+						errors={errors}
+						disabled={loading}
+					
+						value={logo}
+						setValue={setValue}
+					/>
+				</div>
+				<TextArea
+					disabled={loading}
+					label='Farm Bio'
+					id='bio'
+					required
+					register={register}
+					errors={errors}
+					placeholder="Craft Your Farm's Story Here "
+				/>
 
-                  <FormControl>
-                    <Input disabled={loading} placeholder='Phone' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='pickup'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-center space-x-3 space-y-0 rounded-md '>
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      // @ts-ignore
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel>Customer Pickup</FormLabel>
-                    <FormDescription>
-                      I would like to offer customer pickup for orders
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='pickupInfo'
-              render={({ field }) => (
-                <FormItem
-                  className={cn('', form.watch('pickup') ? 'grid' : 'hidden')}
-                >
-                  <FormLabel>Pickup Hours</FormLabel>
-
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder='8:00AM - 3:00PM'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Enter hours for pickup</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name='delivery'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-center space-x-3 space-y-0 rounded-md '>
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      // @ts-ignore
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel>Local Delivery</FormLabel>
-                    <FormDescription>
-                      I would like to offer local delivery for orders.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='deliveryRadius'
-              render={({ field }) => (
-                <FormItem
-                  className={cn('', form.watch('delivery') ? 'grid' : 'hidden')}
-                >
-                  <FormLabel>Delivery Radius</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='20' {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Enter your local delivery radius in miles
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className='grid grid-cols-2'>
-            <FormField
-              control={form.control}
-              name='image'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Farm Image</FormLabel>
-                  <FormControl>
-                    <ImageUpload
-                      value={field.value.map((image) => image.url)}
-                      disabled={loading}
-                      onChange={(url) =>
-                        field.onChange([...field.value, { url }])
-                      }
-                      onRemove={(url) =>
-                        field.onChange([
-                          ...field.value.filter(
-                            (current) => current.url !== url
-                          ),
-                        ])
-                      }
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />{' '}
-            <FormField
-              control={form.control}
-              name='logo'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Farm Logo</FormLabel>
-                  <FormControl>
-                    <ImageUpload
-                      value={field.value.map((image) => image.url)}
-                      disabled={loading}
-                      onChange={(url) =>
-                        field.onChange([...field.value, { url }])
-                      }
-                      onRemove={(url) =>
-                        field.onChange([
-                          ...field.value.filter(
-                            (current) => current.url !== url
-                          ),
-                        ])
-                      }
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormField
-            control={form.control}
-            name='bio'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Farm Bio</FormLabel>
-
-                <FormControl>
-                  <Textarea
-                    rows={5}
-                    disabled={loading}
-                    placeholder='Farm Bio'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='policies'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Farm Policies</FormLabel>
-
-                <FormControl>
-                  <Textarea
-                    rows={5}
-                    disabled={loading}
-                    placeholder='Farm Policies'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button disabled={loading} className='ml-auto' type='submit'>
-            {action}
-          </Button>
-        </form>
-      </Form>
-      <Separator />
-    </>
-  );
+				<TextArea
+					disabled={loading}
+					label='Farm Policies'
+					id='policies'
+					required
+					register={register}
+					errors={errors}
+					placeholder="Outline Your Farm's Commitment: Share Your Delivery, Return, and Service Policies Here."
+				/>
+				<Button disabled={loading} className='ml-auto' type='submit'>
+					{action}
+				</Button>
+			</form>
+			<Separator />
+		</>
+	);
 };
 
 export default SettingsForm;

@@ -72,3 +72,9 @@ export type FarmLogoType = {
 	state: string;
 	logo: Image[];
 };
+
+export interface ColumnDef<T> {
+	accessorKey: keyof T;
+	header: string;
+	className?: string; 
+}

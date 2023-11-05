@@ -4,21 +4,23 @@ import { useEffect, useState } from 'react';
 
 import Modal from '@/app/components/modals/Modal';
 import Button from '@/app/components/ui/Button';
+import { useRouter } from 'next/navigation';
 
 interface AlertModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onConfirm: () => void;
-	loading: boolean;
+	loading?: boolean;
+	action?: string;
 }
 
-const AlertModal: React.FC<AlertModalProps> = ({
+const MustBeSignedInModal: React.FC<AlertModalProps> = ({
 	isOpen,
 	onClose,
-	onConfirm,
 	loading,
+	action,
 }) => {
 	const [isMounted, setIsMounted] = useState(false);
+	const router = useRouter();
 
 	useEffect(() => {
 		setIsMounted(true);
@@ -30,8 +32,8 @@ const AlertModal: React.FC<AlertModalProps> = ({
 
 	return (
 		<Modal
-			title='Are you sure?'
-			description='This action cannot be undone.'
+			title={`You must be signed in to ${action}`}
+			description={`Please sign in to ${action} and continue.`}
 			isOpen={isOpen}
 			onClose={onClose}
 		>
@@ -39,7 +41,11 @@ const AlertModal: React.FC<AlertModalProps> = ({
 				<Button disabled={loading} variant='outline' onClick={onClose}>
 					Cancel
 				</Button>
-				<Button disabled={loading} variant='destructive' onClick={onConfirm}>
+				<Button
+					disabled={loading}
+					variant='default'
+					onClick={() => router.push('/auth')}
+				>
 					Continue
 				</Button>
 			</div>
@@ -47,4 +53,4 @@ const AlertModal: React.FC<AlertModalProps> = ({
 	);
 };
 
-export default AlertModal;
+export default MustBeSignedInModal;

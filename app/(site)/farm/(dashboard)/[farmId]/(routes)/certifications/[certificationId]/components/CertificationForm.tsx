@@ -1,234 +1,164 @@
 'use client';
 
-import * as z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useToast } from '@/components/ui/use-toast';
+
+import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Certifications, CertificationType } from '@prisma/client';
+import { Certification, CertificationType } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/components/ui/select';
+import Select from '@/app/components/ui/Select';
 
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Separator } from '@/components/ui/separator';
-import Heading from '@/components/ui/Heading';
-import AlertModal from '@/components/modals/AlertModal';
-import ImageUpload from '@/components/ui/ImageUpload';
+import Input from '@/app/components/ui/Input';
+import Button from '@/app/components/ui/Button';
 
-const formSchema = z.object({
-  typeId: z.string().min(1),
-  imageUrl: z.object({ url: z.string() }).array(),
-  description: z.string().optional(),
-});
-
-type CertificationsFormValues = z.infer<typeof formSchema>;
+import Separator from '@/app/components/ui/Separator';
+import Heading from '@/app/components/ui/Heading';
+import AlertModal from '@/app/components/modals/AlertModal';
+import ImageUpload from '@/app/components/ui/ImageUpload';
 
 interface CertificationsFormProps {
-  initialData: Certifications | null;
-  types: CertificationType[];
+	initialData: Certification | null;
+	types: CertificationType[];
 }
 
-const BillboardForm: React.FC<CertificationsFormProps> = ({
-  initialData,
-  types,
+const CertificationForm: React.FC<CertificationsFormProps> = ({
+	initialData,
+	types,
 }) => {
-  const params = useParams();
-  const router = useRouter();
-  const { toast } = useToast();
+	const params = useParams();
+	const router = useRouter();
 
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+	const [open, setOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit Certification' : 'Create Certification';
-  const description = initialData
-    ? 'Edit a Certification.'
-    : 'Add a new certification';
-  const toastMessage = initialData
-    ? 'Certification updated.'
-    : 'Certification created. Pending approval';
-  const action = initialData ? 'Save changes' : 'Create';
+	const title = initialData ? 'Edit Certification' : 'Create Certification';
+	const description = initialData
+		? 'Edit a Certification.'
+		: 'Add a new certification';
+	const toastMessage = initialData
+		? 'Certification updated.'
+		: 'Certification created. Pending approval';
+	const action = initialData ? 'Save changes' : 'Create';
 
-  const form = useForm<CertificationsFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
-      typeId: '',
-      imageUrl: [],
-      description: '',
-    },
-  });
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		watch,
+		setValue,
+	} = useForm<FieldValues>({
+		defaultValues: initialData || {
+			typeId: '',
+			image: null,
+			description: '',
+		},
+	});
 
-  const onSubmit = async (data: CertificationsFormValues) => {
-    try {
-      setLoading(true);
-      if (initialData) {
-        await axios.patch(
-          `/api/${params.farmId}/certifications/${params.certificationId}`,
-          data
-        );
-      } else {
-        await axios.post(`/api/${params.farmId}/certifications`, data);
-      }
-      router.refresh();
-      router.push(`/farm/${params.farmId}/certifications`);
-      toast({ description: toastMessage });
-    } catch (error: any) {
-      toast({
-        description: 'Something went wrong. Please try again.',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+	const image = watch('image');
+	const type = watch('typeId');
+	const onSubmit: SubmitHandler<FieldValues> = async data => {
+		try {
+			setLoading(true);
+			if (initialData) {
+				await axios.patch(
+					`/api/${params?.farmId}/certifications/${params?.certificationId}`,
+					data
+				);
+			} else {
+				await axios.post(`/api/${params?.farmId}/certifications`, data);
+			}
+			router.refresh();
+			router.push(`/farm/${params?.farmId}/certifications`);
+			toast.success(toastMessage);
+		} catch (error: any) {
+			toast.error('Something went wrong. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
 
-  const values = form.watch();
+	const onDelete = async () => {
+		try {
+			setLoading(true);
+			await axios.delete(
+				`/api/${params?.farmId}/certifications/${params?.certificationId}`
+			);
+			router.refresh();
+			router.push(`/farm/${params?.farmId}/certifications`);
+			toast.success('Certification deleted.');
+		} catch (error: any) {
+			toast.error(
+				'Something went wrong while deleting the certification. Please try again.'
+			);
+		} finally {
+			setLoading(false);
+			setOpen(false);
+		}
+	};
 
-  const onDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(
-        `/api/${params.farmId}/certifications/${params.certificationId}`
-      );
-      router.refresh();
-      router.push(`/farm/${params.farmId}/certifications`);
-      toast({ description: 'Certification deleted.' });
-    } catch (error: any) {
-      toast({
-        description:
-          'Something went wrong while deleting the certification. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-      setOpen(false);
-    }
-  };
+	return (
+		<>
+			{/* <AlertModal
+				isOpen={open}
+				onClose={() => setOpen(false)}
+				onConfirm={onDelete}
+				loading={loading}
+			/> */}
+			<div className='flex items-center justify-between'>
+				<Heading title={title} description={description} />
+				{/* {initialData && (
+					<Button
+						disabled={loading}
+						variant='destructive'
+						size='sm'
+						onClick={() => setOpen(true)}
+					>
+						<Trash className='h-4 w-4' />
+					</Button>
+				)} */}
+			</div>
+			<Separator />
 
-  return (
-    <>
-      <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onConfirm={onDelete}
-        loading={loading}
-      />
-      <div className='flex items-center justify-between'>
-        <Heading title={title} description={description} />
-        {initialData && (
-          <Button
-            disabled={loading}
-            variant='destructive'
-            size='sm'
-            onClick={() => setOpen(true)}
-          >
-            <Trash className='h-4 w-4' />
-          </Button>
-        )}
-      </div>
-      <Separator />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='w-full space-y-8'
-        >
-          <FormField
-            control={form.control}
-            name='imageUrl'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Upload certification documentation</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    value={field.value.map((image) => image.url)}
-                    disabled={loading}
-                    onChange={(url) =>
-                      field.onChange([...field.value, { url }])
-                    }
-                    onRemove={(url) =>
-                      field.onChange([
-                        ...field.value.filter((current) => current.url !== url),
-                      ])
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className='gap-8 md:grid md:grid-cols-2'>
-            <FormField
-              control={form.control}
-              name='typeId'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Certification Type</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder='Select a category'
-                        />
-                      </SelectTrigger>
-                    </FormControl>
+			<form onSubmit={handleSubmit(onSubmit)} className='w-full space-y-8'>
+				{/* <ImageUpload
+					label='Upload certification documentation'
+					id='imageUrl'
+					register={register}
+					errors={errors}
+					disabled={loading}
+					value={image}
+					setValue={setValue}
+				/> */}
 
-                    <SelectContent>
-                      {types.map((type) => (
-                        <SelectItem key={type.id} value={type.id}>
-                          {type.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {values.typeId === 'other' && (
-              <FormField
-                control={form.control}
-                name='description'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Certification Description</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        placeholder='Describe certification'
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            )}
-          </div>
-          <Button disabled={loading} className='ml-auto' type='submit'>
-            {action}
-          </Button>
-        </form>
-      </Form>
-    </>
-  );
+				<div className='gap-8 md:grid md:grid-cols-2'>
+					{/* <Select
+						label='Certification Type'
+						id='typeId'
+						register={register}
+						errors={errors}
+						required
+						disabled={loading}
+						options={types.map(type => type.name)}
+					/> */}
+				
+					{/* {type === 'other' && (
+						<Input
+							id='description'
+							label='Certification Description'
+							disabled={loading}
+              register={register}
+							errors={errors}
+							placeholder='Describe certification'
+						/>
+					)} */}
+				</div>
+				<Button disabled={loading} className='ml-auto' type='submit'>
+					{action}
+				</Button>
+			</form>
+		</>
+	);
 };
-export default BillboardForm;
+export default CertificationForm;

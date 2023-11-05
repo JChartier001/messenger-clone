@@ -10,7 +10,7 @@ const CertificationPage = async ({
 	let certifications = null;
 
 	if (params.certificationId !== 'new') {
-		certifications = await prismadb.certifications.findUnique({
+		certifications = await prismadb.certification.findUnique({
 			where: {
 				id: params.certificationId,
 			},
@@ -18,9 +18,7 @@ const CertificationPage = async ({
 	}
 
 	const types = await prismadb.certificationType.findMany({
-		include: {
-			certification: true,
-		},
+	
 	});
 
 	const otherTypes = [

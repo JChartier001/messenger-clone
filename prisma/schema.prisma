@@ -21,6 +21,9 @@ model User {
   hashedPassword String?
   role           Role      @default(USER)
 
+  favoriteIds String? @db.ObjectId
+  favorites Favorites?
+
   conversationIds String[]       @db.ObjectId
   conversations   Conversation[] @relation(fields: [conversationIds], references: [id])
 
@@ -30,6 +33,19 @@ model User {
   account  Account[]
   messages Message[]
   Order    Order[]
+}
+
+model Favorites {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @db.ObjectId @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  farmIds String[] @db.ObjectId
+  farms   Farm[]   @relation(fields: [farmIds], references: [id])
+
+  productIds String[] @db.ObjectId
+  products   Product[] @relation(fields: [productIds], references: [id])
 }
 
 enum Role {
@@ -114,6 +130,12 @@ model Farm {
   certifications Certification[]
   products       Product[]
   order          Order[]
+
+ favoriteIds String[] @db.ObjectId
+  favorites   Favorites[] @relation(fields: [favoriteIds], references: [id])
+
+  @@index([userId])
+
 }
 
 model Certification {
@@ -166,6 +188,7 @@ model Product {
   longDescription  String         @default("")
   stockQuantity    Int            @default(0)
   slug             String         @unique
+  
   farmId           String         @db.ObjectId
   farm             Farm           @relation(fields: [farmId], references: [id], onDelete: Cascade)
 
@@ -179,6 +202,11 @@ model Product {
   dietary    Dietary[] @relation(fields: [dietaryIds], references: [id])
 
   OrderItem OrderItem[]
+
+  favoriteIds String[] @db.ObjectId
+  favorites   Favorites[] @relation(fields: [favoriteIds], references: [id])
+
+ 
 }
 
 model Order {

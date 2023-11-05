@@ -1,9 +1,8 @@
 'use client';
 
-import { Button } from '@/app/components/ui/Button';
+import Button from '@/app/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import ThemeToggle from '../components/ThemeToggle';
-
 
 const WelcomePage = () => {
 	const router = useRouter();
@@ -14,7 +13,7 @@ const WelcomePage = () => {
 			<Button onClick={() => router.push('/farm')}>Farm</Button>
 			<Button onClick={() => router.push('/store')}>Store</Button>
 			<Button onClick={() => router.push('/customer')}>Customer</Button>
-			
+
 			<ThemeToggle />
 		</div>
 	);

@@ -1,9 +1,10 @@
-import ProductList from '@/components/ProductList';
-import Gallery from '@/components/gallery';
-import Info from '@/components/Info';
+import ProductList from '@/app/components/ProductList';
+import Gallery from '@/app/components/gallery';
+import Info from '@/app/components/Info';
 import prismadb from '@/app/libs/prismadb';
+import getCurrentUser from '@/app/actions/getCurrentUser';
 
-import Container from '@/components/ui/container';
+import Container from '@/app/components/ui/Container';
 
 export const revalidate = 0;
 
@@ -14,6 +15,7 @@ interface ProductPageProps {
 }
 
 const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
+	const currentUser = await getCurrentUser();
 	const product = await prismadb.product.findFirst({
 		where: {
 			slug: params.slug,
@@ -25,9 +27,13 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
 			dietary: true,
 		},
 	});
+
 	const suggestedProducts = await prismadb.product.findMany({
 		where: {
 			categoryId: product?.categoryId,
+			NOT: {
+				id: product?.id,
+			},
 		},
 		include: {
 			images: true,
@@ -54,7 +60,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params }) => {
 					<div className='lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8'>
 						<Gallery images={product.images} />
 						<div className='mt-10 px-4 '>
-							<Info data={product} farm={farm} />
+							<Info data={product} farm={farm} user={currentUser} />
 						</div>
 					</div>
 					<hr className='my-10' />

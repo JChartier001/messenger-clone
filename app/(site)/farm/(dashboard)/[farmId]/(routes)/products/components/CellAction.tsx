@@ -4,17 +4,17 @@ import axios from 'axios';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'react-hot-toast';
 
-import AlertModal from '@/components/modals/AlertModal';
-import { Button } from '@/components/ui/button';
+import AlertModal from '@/app/components/modals/AlertModal';
+import  Button from '@/app/components/ui/Button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
+} from '@/app/components/ui/DropdownMenu';
 
 import { ProductColumn } from './columns';
 
@@ -27,16 +27,16 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const params = useParams();
-  const { toast } = useToast();
+
 
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.farmId}/products/${data.id}`);
-      toast({ description: 'Product deleted.' });
+      await axios.delete(`/api/${params?.farmId}/products/${data.id}`);
+      toast.success('Product deleted.');
       router.refresh();
     } catch (error) {
-      toast({ description: 'Something went wrong', variant: 'destructive' });
+      toast.error('Something went wrong');
     } finally {
       setLoading(false);
       setOpen(false);
@@ -45,7 +45,7 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast({ description: 'Product ID copied to clipboard.' });
+    toast.success('Product ID copied to clipboard.');
   };
 
   return (
@@ -70,7 +70,7 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/farm/${params.farmId}/products/${data.id}`)
+              router.push(`/farm/${params?.farmId}/products/${data.id}`)
             }
           >
             <Edit className='mr-2 h-4 w-4' /> Update

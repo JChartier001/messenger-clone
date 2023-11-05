@@ -12,11 +12,13 @@ import { useRouter } from 'next/navigation';
 
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
+import { User } from '@prisma/client';
 interface FavShareGroupProps {
 	shareLink: string;
 	id: string;
 	itemTitle: string;
 	type: string;
+	user:User | null
 }
 
 const FavShareGroup = ({
@@ -35,11 +37,11 @@ const FavShareGroup = ({
 		if (!user) {
 			return router.push('/sign-in');
 		}
-		const favorites = user?.publicMetadata?.favorites || {
+		const favorites = user?.favorites || {
 			farm: [],
 			product: [],
 		};
-		if (user.publicMetadata.favorites[type].includes(id)) {
+		if (user.favorites[type].includes(id)) {
 			favorites[type] = favorites[type].filter(
 				(itemId: string) => itemId !== id
 			);

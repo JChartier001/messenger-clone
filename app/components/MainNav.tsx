@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/libs/utils';
 
 const MainNav = ({
   className,
@@ -14,34 +14,34 @@ const MainNav = ({
 
   const routes = [
     {
-      href: `/farm/${params.farmId}`,
+      href: `/farm/${params?.farmId}`,
       label: 'Overview',
-      active: pathname === `/farm/${params.farmId}`,
+      active: pathname === `/farm/${params?.farmId}`,
     },
     {
-      href: `/farm/${params.farmId}/certifications`,
+      href: `/farm/${params?.farmId}/certifications`,
       label: 'Certifications',
-      active: pathname === `/farm/${params.farmId}/certifications`,
+      active: pathname === `/farm/${params?.farmId}/certifications`,
     },
     {
-      href: `/farm/${params.farmId}/sizes`,
+      href: `/farm/${params?.farmId}/sizes`,
       label: 'Sizes',
-      active: pathname === `/farm/${params.farmId}/sizes`,
+      active: pathname === `/farm/${params?.farmId}/sizes`,
     },
     {
-      href: `/farm/${params.farmId}/products`,
+      href: `/farm/${params?.farmId}/products`,
       label: 'Products',
-      active: pathname === `/farm/${params.farmId}/products`,
+      active: pathname === `/farm/${params?.farmId}/products`,
     },
     {
-      href: `/farm/${params.farmId}/orders`,
+      href: `/farm/${params?.farmId}/orders`,
       label: 'Orders',
-      active: pathname === `/farm/${params.farmId}/orders`,
+      active: pathname === `/farm/${params?.farmId}/orders`,
     },
     {
-      href: `/farm/${params.farmId}/settings`,
+      href: `/farm/${params?.farmId}/settings`,
       label: 'Settings',
-      active: pathname === `/farm/${params.farmId}/settings`,
+      active: pathname === `/farm/${params?.farmId}/settings`,
     },
   ];
 

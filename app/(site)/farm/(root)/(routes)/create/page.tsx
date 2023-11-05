@@ -1,5 +1,5 @@
 import SettingsForm from '../../../(dashboard)/[farmId]/(routes)/settings/components/SettingsForm';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/app/components/ui/Heading';
 
 const CreateFarmPage = async () => {
   const title = 'Create farm';

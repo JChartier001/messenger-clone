@@ -4,38 +4,41 @@ import { ShoppingBag, Tractor, Store } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import  Button from '@/app/components/ui/Button';
+import Button from '@/app/components/ui/Button';
 import useCart from '@/app/hooks/useCart';
 
 import ThemeToggle from './ThemeToggle';
 import { LayoutDashboard } from 'lucide-react';
 import { User } from '@prisma/client';
 
-interface NavbarActionsProps { 
-  user: User
+interface NavbarActionsProps {
+	user: User;
 }
 
-const NavbarActions: React.FC<NavbarActionsProps> = ({user}) => {
-  const [isMounted, setIsMounted] = useState(false);
+const NavbarActions: React.FC<NavbarActionsProps> = ({ user }) => {
+	const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
-  const router = useRouter();
-  const cart = useCart();
-  const count = cart.order
-    .map((order) => order.items.reduce((sum, item) => sum + item.quantity!, 0))
-    .reduce((a, b) => a + b, 0);
+	const router = useRouter();
+	const cart = useCart();
+	const count = cart.order
+		.map(order => order.items.reduce((sum, item) => sum + item.quantity!, 0))
+		.reduce((a, b) => a + b, 0);
 
-  if (!isMounted) {
-    return null;
-  }
-  return (
+	if (!isMounted) {
+		return null;
+	}
+	return (
 		<div className='ml-auto flex items-center gap-x-4'>
 			{/* <ToolTip content='Shop'> */}
 			<ThemeToggle />
-			<Button variant='text' className='group flex  items-center justify-center rounded-full  border-none bg-white p-2 text-sm font-medium transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-transparent dark:hover:bg-white '>
+			<Button
+				variant='text'
+				className='group flex  items-center justify-center rounded-full  border-none bg-white p-2 text-sm font-medium transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-transparent dark:hover:bg-white '
+			>
 				<Store
 					size={20}
 					className='text-black group-hover:text-white  dark:text-white dark:group-hover:text-black '
@@ -45,8 +48,8 @@ const NavbarActions: React.FC<NavbarActionsProps> = ({user}) => {
 			{/* </ToolTip> */}
 			{!user?.id && !user?.email ? (
 				<>
-					<Button onClick={() => router.push('/sign-in')}>Login</Button>
-					<Button onClick={() => router.push('/sign-up')}>Register</Button>
+					<Button onClick={() => router.push('/auth')}>Login</Button>
+					<Button onClick={() => router.push('/auth')}>Register</Button>
 				</>
 			) : (
 				<>
