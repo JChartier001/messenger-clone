@@ -1,4 +1,4 @@
-import prismadb from '@/app/libs/prismadb';
+import prismadb from "@/app/libs/prismadb";
 
 export const getStockCount = async (farmId: string) => {
   const stockCount = await prismadb.product.count({

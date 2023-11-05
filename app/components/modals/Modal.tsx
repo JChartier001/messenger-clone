@@ -59,54 +59,54 @@
 
 // export default Modal;
 
-'use client';
+"use client";
 
 import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
   DialogTitle,
-  DialogFooter
-} from '@/app/components/ui/Dialog';
+  DialogFooter,
+} from "@/app/components/ui/Dialog";
 
 interface ModalProps {
-	title: string;
-	description: string;
-	isOpen: boolean;
-	onClose: () => void;
-	children?: React.ReactNode;
-	footer?: React.ReactNode;
-	className?: string;
+  title: string;
+  description: string;
+  isOpen: boolean;
+  onClose: () => void;
+  children?: React.ReactNode;
+  footer?: React.ReactNode;
+  className?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
-	title,
-	description,
-	isOpen,
-	onClose,
-	children,
-	footer,
-	className,
+  title,
+  description,
+  isOpen,
+  onClose,
+  children,
+  footer,
+  className,
 }) => {
-	const onChange = (open: boolean) => {
-		if (!open) {
-			onClose();
-		}
-	};
+  const onChange = (open: boolean) => {
+    if (!open) {
+      onClose();
+    }
+  };
 
-	return (
-		<Dialog open={isOpen} onOpenChange={onChange}>
-			<DialogContent className={className}>
-				<DialogHeader>
-					<DialogTitle>{title}</DialogTitle>
-					<DialogDescription>{description}</DialogDescription>
-				</DialogHeader>
-				<div>{children}</div>
-			</DialogContent>
-			<DialogFooter>{footer}</DialogFooter>
-		</Dialog>
-	);
+  return (
+    <Dialog open={isOpen} onOpenChange={onChange}>
+      <DialogContent className={className}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <div>{children}</div>
+      </DialogContent>
+      <DialogFooter>{footer}</DialogFooter>
+    </Dialog>
+  );
 };
 
 export default Modal;

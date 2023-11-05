@@ -1,5 +1,5 @@
-import React from 'react';
-import { Product } from '@/app/types';
+import React from "react";
+import { Product } from "@/app/types";
 
 interface DescriptionProps {
   data: Product;

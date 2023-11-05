@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Check, ChevronsUpDown, PlusCircle, StoreIcon } from 'lucide-react';
+import * as React from "react";
+import { Check, ChevronsUpDown, PlusCircle, StoreIcon } from "lucide-react";
 
-import { cn } from '@/app/libs/utils';
-import  Button from '@/app/components/ui/ShadCNButton';
+import { cn } from "@/app/libs/utils";
+import Button from "@/app/components/ui/ShadCNButton";
 import {
   Command,
   CommandEmpty,
@@ -13,13 +13,13 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@/app/components/ui/Command';
+} from "@/app/components/ui/Command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/app/components/ui/Popover';
-import { useParams, useRouter } from 'next/navigation';
+} from "@/app/components/ui/Popover";
+import { useParams, useRouter } from "next/navigation";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -38,10 +38,9 @@ const FarmSwitcher = ({ className, items = [] }: farmSwitcherProps) => {
   }));
 
   const currentFarm = formattedItems.find(
-    (item) => item.value === params?.farmId
+    (item) => item.value === params?.farmId,
   );
 
-  
   const [open, setOpen] = React.useState(false);
 
   const onFarmSelect = (farm: { value: string; label: string }) => {
@@ -53,38 +52,38 @@ const FarmSwitcher = ({ className, items = [] }: farmSwitcherProps) => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant='outline'
-          size='sm'
+          variant="outline"
+          size="sm"
           role="combobox"
           aria-expanded={open}
-          aria-label='Select a farm'
-          className={cn('w-[200px] justify-between', className)}
+          aria-label="Select a farm"
+          className={cn("w-[200px] justify-between", className)}
         >
-          <StoreIcon className='mr-2 h-4 w-4' />
+          <StoreIcon className="mr-2 h-4 w-4" />
           {currentFarm?.label}
-          <ChevronsUpDown className='ml-auto h-4 w-4 shrink-0 opacity-50' />
+          <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-[200px] p-0'>
+      <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandList>
-            <CommandInput placeholder='Search farm...' />
+            <CommandInput placeholder="Search farm..." />
             <CommandEmpty>No farm found.</CommandEmpty>
-            <CommandGroup heading='Farms'>
+            <CommandGroup heading="Farms">
               {formattedItems.map((farm) => (
                 <CommandItem
                   key={farm.value}
                   onSelect={() => onFarmSelect(farm)}
-                  className='text-sm'
+                  className="text-sm"
                 >
-                  <StoreIcon className='mr-2 h-4 w-4' />
+                  <StoreIcon className="mr-2 h-4 w-4" />
                   {farm.label}
                   <Check
                     className={cn(
-                      'ml-auto h-4 w-4',
+                      "ml-auto h-4 w-4",
                       currentFarm?.value === farm.value
-                        ? 'opacity-100'
-                        : 'opacity-0'
+                        ? "opacity-100"
+                        : "opacity-0",
                     )}
                   />
                 </CommandItem>
@@ -98,10 +97,10 @@ const FarmSwitcher = ({ className, items = [] }: farmSwitcherProps) => {
                 onSelect={() => {
                   setOpen(false);
 
-                  router.push('/farm/create');
+                  router.push("/farm/create");
                 }}
               >
-                <PlusCircle className='mr-2 h-5 w-5' />
+                <PlusCircle className="mr-2 h-5 w-5" />
                 Create new farm
               </CommandItem>
             </CommandGroup>

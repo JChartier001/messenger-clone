@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import axios from 'axios';
-import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'react-hot-toast';
+import axios from "axios";
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
-import AlertModal from '@/app/components/modals/AlertModal';
-import  Button from '@/app/components/ui/Button';
+import AlertModal from "@/app/components/modals/AlertModal";
+import Button from "@/app/components/ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '@/app/components/ui/DropdownMenu';
+} from "@/app/components/ui/DropdownMenu";
 
-import { ProductColumn } from './columns';
+import { ProductColumn } from "./columns";
 
 interface CellActionProps {
   data: ProductColumn;
@@ -28,15 +28,14 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
 
-
   const onConfirm = async () => {
     try {
       setLoading(true);
       await axios.delete(`/api/${params?.farmId}/products/${data.id}`);
-      toast.success('Product deleted.');
+      toast.success("Product deleted.");
       router.refresh();
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -45,7 +44,7 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('Product ID copied to clipboard.');
+    toast.success("Product ID copied to clipboard.");
   };
 
   return (
@@ -58,25 +57,25 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost' className='h-8 w-8 p-0'>
-            <span className='sr-only'>Open menu</span>
-            <MoreHorizontal className='h-4 w-4' />
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
+        <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => onCopy(data.id)}>
-            <Copy className='mr-2 h-4 w-4' /> Copy Id
+            <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
               router.push(`/farm/${params?.farmId}/products/${data.id}`)
             }
           >
-            <Edit className='mr-2 h-4 w-4' /> Update
+            <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Trash className='mr-2 h-4 w-4' /> Delete
+            <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

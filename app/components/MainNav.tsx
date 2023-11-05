@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
 
-import { cn } from '@/app/libs/utils';
+import { cn } from "@/app/libs/utils";
 
 const MainNav = ({
   className,
@@ -15,39 +15,39 @@ const MainNav = ({
   const routes = [
     {
       href: `/farm/${params?.farmId}`,
-      label: 'Overview',
+      label: "Overview",
       active: pathname === `/farm/${params?.farmId}`,
     },
     {
       href: `/farm/${params?.farmId}/certifications`,
-      label: 'Certifications',
+      label: "Certifications",
       active: pathname === `/farm/${params?.farmId}/certifications`,
     },
     {
       href: `/farm/${params?.farmId}/sizes`,
-      label: 'Sizes',
+      label: "Sizes",
       active: pathname === `/farm/${params?.farmId}/sizes`,
     },
     {
       href: `/farm/${params?.farmId}/products`,
-      label: 'Products',
+      label: "Products",
       active: pathname === `/farm/${params?.farmId}/products`,
     },
     {
       href: `/farm/${params?.farmId}/orders`,
-      label: 'Orders',
+      label: "Orders",
       active: pathname === `/farm/${params?.farmId}/orders`,
     },
     {
       href: `/farm/${params?.farmId}/settings`,
-      label: 'Settings',
+      label: "Settings",
       active: pathname === `/farm/${params?.farmId}/settings`,
     },
   ];
 
   return (
     <nav
-      className={cn('flex items-center space-x-4 lg:space-x-6', className)}
+      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
       {...props}
     >
       {routes.map((route) => (
@@ -55,10 +55,10 @@ const MainNav = ({
           key={route.href}
           href={route.href}
           className={cn(
-            'text-sm font-medium transition-colors hover:text-primary',
+            "text-sm font-medium transition-colors hover:text-primary",
             route.active
-              ? 'text-black dark:text-white'
-              : 'text-muted-foreground'
+              ? "text-black dark:text-white"
+              : "text-muted-foreground",
           )}
         >
           {route.label}

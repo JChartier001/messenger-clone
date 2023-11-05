@@ -1,9 +1,9 @@
-import { Order } from '@/types';
-import React from 'react';
-import Date from '@/components/ui/Date';
-import Currency from '@/components/ui/currency';
-import ToolTip from '@/components/ToolTip';
-import { useUser } from '@clerk/nextjs';
+import { Order } from "@/types";
+import React from "react";
+import Date from "@/app/components/ui/Date";
+import Currency from "@/app/components/ui/currency";
+import ToolTip from "@/app/components/ToolTip";
+import { useUser } from "@clerk/nextjs";
 
 interface OrderHeaderProps {
   order: Order;
@@ -12,17 +12,17 @@ interface OrderHeaderProps {
 const OrderHeader = ({ order }: OrderHeaderProps) => {
   const { user } = useUser();
 
-  const address = order.address.split(',');
+  const address = order.address.split(",");
 
   return (
-    <div className='flex w-full items-center justify-center bg-gray-50 p-3  dark:bg-gray-900'>
-      <div className='grid grid-cols-4 '>
+    <div className="flex w-full items-center justify-center bg-gray-50 p-3  dark:bg-gray-900">
+      <div className="grid grid-cols-4 ">
         <div>
           <p>ORDER PLACED</p>
           <Date dateString={order.createdAt} />
         </div>
 
-        <div className=''>
+        <div className="">
           <p>Total</p>
           {order.payment?.amount ? (
             <Currency value={order.payment?.amount / 100} />

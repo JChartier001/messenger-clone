@@ -11,17 +11,16 @@ const getCurrentUser = async () => {
         email: session.user.email,
       },
       include: {
-        favorites: true,        
-      }
+        favorites: true,
+      },
     });
-   
+
     if (!currentUser) return null;
 
     return currentUser;
   } catch (err: any) {
     return null;
   }
-  
 };
 
 export default getCurrentUser;

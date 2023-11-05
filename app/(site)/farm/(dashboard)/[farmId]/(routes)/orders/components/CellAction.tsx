@@ -6,7 +6,7 @@ import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 
-import Button from "@/app/components/ui/Button";
+import Button from "@/app/components/ui/ShadCNButton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,36 +16,39 @@ import {
 } from "@/app/components/ui/DropdownMenu";
 import AlertModal from "@/app/components/modals/AlertModal";
 
-import { SizeColumn } from "./columns";
+import { OrderColumn } from "./columns";
 
 interface CellActionProps {
-  data: SizeColumn;
+  data: OrderColumn;
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onConfirm = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/${params?.farmId}/sizes/${data.id}`);
-      toast.success("Size deleted.");
-      router.refresh();
-    } catch (error) {
-      toast.error("Make sure you removed all products using this size first.");
-    } finally {
-      setOpen(false);
-      setLoading(false);
-    }
+    // try {
+    // 	setLoading(true);
+    // 	await axios.delete(`/api/${params?.farmId}/certifications/${data.id}`);
+    // 	toast.success('Order deleted.');
+    // 	router.refresh();
+    // } catch (error) {
+    // 	toast.error(
+    // 		'An error occurred while deleting the certification. Please try again.'
+    // 	);
+    // } finally {
+    // 	setOpen(false);
+    // 	setLoading(false);
+    // }
   };
 
-  const onCopy = (id: string) => {
-    navigator.clipboard.writeText(id);
-    toast.success("Size ID copied to clipboard.");
-  };
+  // const onCopy = (id: string) => {
+  // 	navigator.clipboard.writeText(id);
+  // 	toast.success({ description: 'Certification ID copied to clipboard.' });
+  // };
 
   return (
     <>
@@ -64,16 +67,16 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data.id)}>
-            <Copy className="mr-2 h-4 w-4" /> Copy Id
+          {/* <DropdownMenuItem onClick={() => onCopy(data.id)}>
+            <Copy className='mr-2 h-4 w-4' /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/farm/${params?.farmId}/sizes/${data.id}`)
+              router.push(`/farm/${params.farmId}/certifications/${data.id}`)
             }
           >
-            <Edit className="mr-2 h-4 w-4" /> Update
-          </DropdownMenuItem>
+            <Edit className='mr-2 h-4 w-4' /> Update
+          </DropdownMenuItem> */}
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
@@ -82,4 +85,5 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
     </>
   );
 };
+
 export default CellAction;

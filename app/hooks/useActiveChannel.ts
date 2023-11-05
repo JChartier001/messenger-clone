@@ -42,5 +42,5 @@ import useActiveList from "./useActiveList";
 // };
 const useActiveChannel = () => {
   return null;
-}
+};
 export default useActiveChannel;

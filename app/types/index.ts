@@ -11,45 +11,45 @@ export type FullConversationType = Conversation & {
 };
 
 export interface Product {
-	id: string;
-	category: Category;
-	name: string;
-	price: number;
-	isFeatured: boolean;
-	images: Image[];
-	label: Label;
-	longDescription: string;
-	slug: string;
-	shortDescription: string;
-	dietary: Dietary[];
-	stockQuantity: number;
+  id: string;
+  category: Category;
+  name: string;
+  price: number;
+  isFeatured: boolean;
+  images: Image[];
+  label: Label;
+  longDescription: string;
+  slug: string;
+  shortDescription: string;
+  dietary: Dietary[];
+  stockQuantity: number;
 }
 export type Label = {
-	name: string;
+  name: string;
 };
 
 export interface Image {
-	id?: string;
-	url: string;
+  id?: string;
+  url: string;
 }
 export interface Category {
-	id: string;
-	name: string;
-	slug: string;
+  id: string;
+  name: string;
+  slug: string;
 }
 export interface Dietary {
-	id: string;
-	name: string;
-	slug: string;
+  id: string;
+  name: string;
+  slug: string;
 }
 export interface Item extends Product {
-	id: string;
-	farmId?: string; // Ensuring this is a string and not optional
-	price: number;
-	quantity?: number; // Since we're setting it during add, it can be optional here
-	subtotal?: number;
-	farm?: Farm; // Optional because it's calculated later
-	// ... Add other properties as needed (category, name, etc.)
+  id: string;
+  farmId?: string; // Ensuring this is a string and not optional
+  price: number;
+  quantity?: number; // Since we're setting it during add, it can be optional here
+  subtotal?: number;
+  farm?: Farm; // Optional because it's calculated later
+  // ... Add other properties as needed (category, name, etc.)
 }
 export interface Farm {
   id: string;
@@ -67,14 +67,50 @@ export interface Farm {
   products?: Product[];
 }
 export type FarmLogoType = {
-	name: string;
-	city: string;
-	state: string;
-	logo: Image[];
+  name: string;
+  city: string;
+  state: string;
+  logo: Image[];
 };
 
 export interface ColumnDef<T> {
-	accessorKey: keyof T;
-	header: string;
-	className?: string; 
+  accessorKey: keyof T;
+  header: string;
+  className?: string;
+}
+export interface FarmOrder {
+  farmId: string;
+  items: Item[];
+  totalPrice?: number;
+  referenceId?: string;
+}
+export interface Item extends Product {
+  id: string;
+  farmId?: string;
+  price: number;
+  quantity?: number;
+  subtotal?: number;
+  farm?: Farm;
+}
+
+export interface Order {
+  id: string;
+  address: string;
+  createdAt: string;
+  customerId: string;
+  farm: Farm;
+  orderItems: OrderItem[];
+  payment: Payment;
+  phone: string;
+  updatedAt: string;
+}
+export interface OrderItem {
+  id: string;
+  product: Product;
+  quantity: number;
+}
+
+export interface Payment {
+  amount: number;
+  status: string;
 }

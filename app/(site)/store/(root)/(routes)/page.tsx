@@ -1,8 +1,8 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ProductList from '@/app/components/ProductList';
-import Billboard from '@/app/components/ui/Billboard';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ProductList from "@/app/components/ProductList";
+import Billboard from "@/app/components/ui/Billboard";
 
 const StorePage = () => {
   const [products, setProducts] = useState([]);
@@ -19,9 +19,9 @@ const StorePage = () => {
   }, []);
 
   return (
-    <div className='w-full pb-5'>
-      <Billboard slug={'all'} />
-      <ProductList items={products} title={''} />
+    <div className="w-full pb-5">
+      <Billboard slug={"all"} />
+      <ProductList items={products} title={""} />
     </div>
   );
 };

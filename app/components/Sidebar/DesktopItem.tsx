@@ -3,7 +3,6 @@ import React from "react";
 import clsx from "clsx";
 import Link from "next/link";
 
-
 interface DesktopItemProps {
   href: string;
   icon: any;

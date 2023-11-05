@@ -1,9 +1,9 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-import { useParams } from 'next/navigation';
-import ProductList from '@/app/components/ProductList';
+import { useParams } from "next/navigation";
+import ProductList from "@/app/components/ProductList";
 
 const CategoryPage = () => {
   const params = useParams();
@@ -20,7 +20,7 @@ const CategoryPage = () => {
       });
   }, [params?.slug]);
 
-  return <ProductList items={products} title={''} />;
+  return <ProductList items={products} title={""} />;
 };
 
 export default CategoryPage;

@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import * as z from 'zod';
-import axios from 'axios';
-import { useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useToast } from '@/components/ui/use-toast';
-import { Trash } from 'lucide-react';
-import { Category, Image, Product, UnitLabel, Dietary } from '@prisma/client';
-import { useParams, useRouter } from 'next/navigation';
+import * as z from "zod";
+import axios from "axios";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useToast } from "@/app/components/ui/use-toast";
+import { Trash } from "lucide-react";
+import { Category, Image, Product, UnitLabel, Dietary } from "@prisma/client";
+import { useParams, useRouter } from "next/navigation";
 
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import { Input } from "@/app/components/ui/input";
+import { Button } from "@/app/components/ui/button";
+import { Textarea } from "@/app/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -21,20 +21,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Separator } from '@/components/ui/separator';
-import Heading from '@/components/ui/Heading';
-import AlertModal from '@/components/modals/AlertModal';
+} from "@/app/components/ui/form";
+import { Separator } from "@/app/components/ui/separator";
+import Heading from "@/app/components/ui/Heading";
+import AlertModal from "@/app/components/modals/AlertModal";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import ImageUpload from '@/components/ui/ImageUpload';
-import { Checkbox } from '@/components/ui/checkbox';
-import MultiSelect from '@/components/ui/MultiSelect';
+} from "@/app/components/ui/select";
+import ImageUpload from "@/app/components/ui/ImageUpload";
+import { Checkbox } from "@/app/components/ui/checkbox";
+import MultiSelect from "@/app/components/ui/MultiSelect";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -75,10 +75,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit product' : 'Create product';
-  const description = initialData ? 'Edit a product.' : 'Add a new product';
-  const toastMessage = initialData ? 'Product updated.' : 'Product created.';
-  const action = initialData ? 'Save changes' : 'Create';
+  const title = initialData ? "Edit product" : "Create product";
+  const description = initialData ? "Edit a product." : "Add a new product";
+  const toastMessage = initialData ? "Product updated." : "Product created.";
+  const action = initialData ? "Save changes" : "Create";
 
   const defaultValues = initialData
     ? {
@@ -86,7 +86,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         price: parseFloat(String(initialData?.price)),
       }
     : {
-        name: '',
+        name: "",
         images: [],
         price: undefined,
         categoryId: undefined,
@@ -110,7 +110,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
       if (initialData) {
         await axios.patch(
           `/api/${params.farmId}/products/${params.productId}`,
-          data
+          data,
         );
       } else {
         await axios.post(`/api/${params.farmId}/products`, data);
@@ -119,7 +119,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
       router.push(`/farm/${params.farmId}/products`);
       toast({ description: toastMessage });
     } catch (error: any) {
-      toast({ description: 'Something went wrong.', variant: 'destructive' });
+      toast({ description: "Something went wrong.", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -131,9 +131,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
       await axios.delete(`/api/${params.farmId}/products/${params.productId}`);
       router.refresh();
       router.push(`/farm/${params.farmId}/products`);
-      toast({ description: 'Product deleted.' });
+      toast({ description: "Product deleted." });
     } catch (error: any) {
-      toast({ description: 'Something went wrong.', variant: 'destructive' });
+      toast({ description: "Something went wrong.", variant: "destructive" });
     } finally {
       setLoading(false);
       setOpen(false);
@@ -148,16 +148,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
         onConfirm={onDelete}
         loading={loading}
       />
-      <div className='flex items-center justify-between'>
+      <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
           <Button
             disabled={loading}
-            variant='destructive'
-            size='sm'
+            variant="destructive"
+            size="sm"
             onClick={() => setOpen(true)}
           >
-            <Trash className='h-4 w-4' />
+            <Trash className="h-4 w-4" />
           </Button>
         )}
       </div>
@@ -165,11 +165,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='w-full space-y-8'
+          className="w-full space-y-8"
         >
           <FormField
             control={form.control}
-            name='images'
+            name="images"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Images</FormLabel>
@@ -194,14 +194,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
           {/* <div className='gap-8 md:grid md:grid-cols-2'> */}
           <FormField
             control={form.control}
-            name='name'
+            name="name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
                     disabled={loading}
-                    placeholder='Product name'
+                    placeholder="Product name"
                     {...field}
                   />
                 </FormControl>
@@ -211,14 +211,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
           />
           <FormField
             control={form.control}
-            name='shortDescription'
+            name="shortDescription"
             render={({ field }) => (
-              <FormItem className='mt-4 md:mt-0'>
+              <FormItem className="mt-4 md:mt-0">
                 <FormLabel>Product Subtitle</FormLabel>
                 <FormControl>
                   <Input
                     disabled={loading}
-                    placeholder='Short Product description'
+                    placeholder="Short Product description"
                     {...field}
                   />
                 </FormControl>
@@ -230,15 +230,15 @@ const ProductForm: React.FC<ProductFormProps> = ({
           {/* <div className='flex flex-col space-y-4'> */}
           <FormField
             control={form.control}
-            name='longDescription'
+            name="longDescription"
             render={({ field }) => (
-              <FormItem className='mt-4 md:mt-0'>
+              <FormItem className="mt-4 md:mt-0">
                 <FormLabel>Full Description</FormLabel>
                 <FormControl>
                   <Textarea
                     rows={5}
                     disabled={loading}
-                    placeholder='Product Description'
+                    placeholder="Product Description"
                     {...field}
                   />
                 </FormControl>
@@ -250,14 +250,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
           {/* <div className='gap-8 md:grid md:grid-cols-3 lg:grid-cols-4'> */}
           <FormField
             control={form.control}
-            name='price'
+            name="price"
             render={({ field }) => (
-              <FormItem className='mt-4'>
+              <FormItem className="mt-4">
                 <FormLabel>Price</FormLabel>
                 <FormControl>
                   <Input
                     disabled={loading}
-                    placeholder='9.99'
+                    placeholder="9.99"
                     {...field}
                     // type='number'
                   />
@@ -268,14 +268,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
           />
           <FormField
             control={form.control}
-            name='stockQuantity'
+            name="stockQuantity"
             render={({ field }) => (
-              <FormItem className='mt-4'>
+              <FormItem className="mt-4">
                 <FormLabel>Stock Quantity</FormLabel>
                 <FormControl>
                   <Input
                     disabled={loading}
-                    placeholder='Quantity in stock'
+                    placeholder="Quantity in stock"
                     // type='number'
                     {...field}
                   />
@@ -286,9 +286,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
           />
           <FormField
             control={form.control}
-            name='categoryId'
+            name="categoryId"
             render={({ field }) => (
-              <FormItem className='mt-4'>
+              <FormItem className="mt-4">
                 <FormLabel>Category</FormLabel>
                 <Select
                   disabled={loading}
@@ -300,18 +300,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     <SelectTrigger>
                       <SelectValue
                         defaultValue={field.value}
-                        placeholder='Select a category'
+                        placeholder="Select a category"
                       />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {categories.map(
                       (category) =>
-                        category.slug !== 'all' && (
+                        category.slug !== "all" && (
                           <SelectItem key={category.id} value={category.id}>
                             {category.name}
                           </SelectItem>
-                        )
+                        ),
                     )}
                   </SelectContent>
                 </Select>
@@ -321,13 +321,13 @@ const ProductForm: React.FC<ProductFormProps> = ({
           />
           <FormField
             control={form.control}
-            name='dietaryId'
+            name="dietaryId"
             render={({ field }) => (
-              <FormItem className='mt-4'>
+              <FormItem className="mt-4">
                 <FormLabel>Dietary</FormLabel>
                 <MultiSelect
                   name={field.name}
-                  label={'Select dietary option'}
+                  label={"Select dietary option"}
                   value={field.value}
                   defaultValue={field.value}
                   onChange={(selection: string) =>
@@ -342,7 +342,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     (dietary: { name: string; id: string }) => ({
                       label: dietary.name,
                       value: dietary.id,
-                    })
+                    }),
                   )}
                 />
                 <FormMessage />
@@ -351,9 +351,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
           />
           <FormField
             control={form.control}
-            name='labelId'
+            name="labelId"
             render={({ field }) => (
-              <FormItem className='mt-4'>
+              <FormItem className="mt-4">
                 <FormLabel>Label</FormLabel>
                 <Select
                   disabled={loading}
@@ -365,7 +365,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     <SelectTrigger>
                       <SelectValue
                         defaultValue={field.value}
-                        placeholder='Select a label'
+                        placeholder="Select a label"
                       />
                     </SelectTrigger>
                   </FormControl>
@@ -383,9 +383,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
           />
           <FormField
             control={form.control}
-            name='isFeatured'
+            name="isFeatured"
             render={({ field }) => (
-              <FormItem className='mt-4 flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4'>
+              <FormItem className="mt-4 flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -393,7 +393,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <div className='space-y-1 leading-none'>
+                <div className="space-y-1 leading-none">
                   <FormLabel>Featured</FormLabel>
                   <FormDescription>
                     This product will appear on the home page
@@ -404,9 +404,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
           />
           <FormField
             control={form.control}
-            name='isArchived'
+            name="isArchived"
             render={({ field }) => (
-              <FormItem className='mt-4 flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4'>
+              <FormItem className="mt-4 flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -414,7 +414,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <div className='space-y-1 leading-none'>
+                <div className="space-y-1 leading-none">
                   <FormLabel>Archived</FormLabel>
                   <FormDescription>
                     This product will not appear anywhere in the farm.
@@ -426,8 +426,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
           {/* </div> */}
           <Button
             disabled={loading}
-            className='ml-auto'
-            type='submit'
+            className="ml-auto"
+            type="submit"
             onClick={form.handleSubmit(onSubmit)}
           >
             {action}

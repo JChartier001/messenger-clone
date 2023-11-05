@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
 });
 
 interface CurrencyProps {
@@ -23,7 +23,7 @@ const Currency: React.FC<CurrencyProps> = ({ value = 0 }) => {
   }
 
   return (
-    <div className='text-[#ed7f74]'>{formatter.format(Number(value))}</div>
+    <div className="text-[#ed7f74]">{formatter.format(Number(value))}</div>
   );
 };
 

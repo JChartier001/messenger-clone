@@ -1,9 +1,8 @@
-import LoadingModal from '@/app/components/modals/LoadingModal';
-
+import LoadingModal from "@/app/components/modals/LoadingModal";
 
 const Loading = () => {
   return (
-    <div className='flex h-full w-full items-center justify-center'>
+    <div className="flex h-full w-full items-center justify-center">
       <LoadingModal />
     </div>
   );

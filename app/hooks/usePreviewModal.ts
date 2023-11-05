@@ -1,6 +1,6 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-import { Item } from '@/types';
+import { Item } from "@/types";
 
 interface PreviewModalStore {
   isOpen: boolean;

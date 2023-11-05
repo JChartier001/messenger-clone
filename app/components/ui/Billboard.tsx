@@ -1,4 +1,4 @@
-import prismadb from '@/app/libs/prismadb';
+import prismadb from "@/app/libs/prismadb";
 
 interface Props {
   slug: string;
@@ -6,12 +6,12 @@ interface Props {
 
 const Billboard = async ({ slug }: Props) => {
   let category;
-  if (slug === 'all')
+  if (slug === "all")
     category = {
       Billboard: [
         {
           imageUrl:
-            'https://res.cloudinary.com/dcw6etnyk/image/upload/v1696371764/fv7ekpzcs5ajbxiyxluy.png',
+            "https://res.cloudinary.com/dcw6etnyk/image/upload/v1696371764/fv7ekpzcs5ajbxiyxluy.png",
         },
       ],
     };
@@ -27,10 +27,10 @@ const Billboard = async ({ slug }: Props) => {
   }
 
   return (
-    <div className='rounded-xl p-3'>
+    <div className="rounded-xl p-3">
       <div
         style={{ backgroundImage: `url(${category?.Billboard[0].imageUrl})` }}
-        className='aspect-rectangle relative overflow-hidden rounded-xl bg-cover bg-center md:aspect-[2.4/1] xl:aspect-[3/1]'
+        className="aspect-rectangle relative overflow-hidden rounded-xl bg-cover bg-center md:aspect-[2.4/1] xl:aspect-[3/1]"
       ></div>
     </div>
   );

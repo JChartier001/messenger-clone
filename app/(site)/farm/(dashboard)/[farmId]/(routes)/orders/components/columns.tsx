@@ -1,36 +1,60 @@
-'use client';
+"use client";
 
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef } from "@tanstack/react-table";
 
 export type OrderColumn = {
   id: string;
   phone: string;
   address: string;
-  isPaid: boolean;
   totalPrice: string;
-  products: string;
+  products: number;
   createdAt: string;
 };
 
 export const columns: ColumnDef<OrderColumn>[] = [
   {
-    accessorKey: 'products',
-    header: 'Products',
+    accessorKey: "customer",
+    header: "Customer",
+    meta: {
+      className: "px-3 py-3.5 text-left text-sm font-semibold  ",
+    },
   },
   {
-    accessorKey: 'phone',
-    header: 'Phone',
+    accessorKey: "phone",
+    header: "Phone",
+    meta: {
+      className:
+        "hidden px-3 py-3.5 text-left text-sm font-semibold lg:table-cell",
+    },
   },
   {
-    accessorKey: 'address',
-    header: 'Address',
+    accessorKey: "address",
+    header: "Address",
+    meta: {
+      className:
+        "hidden px-3 py-3.5 text-left text-sm font-semibold lg:table-cell",
+    },
   },
   {
-    accessorKey: 'totalPrice',
-    header: 'Total price',
+    accessorKey: "products",
+    header: "Products",
+    meta: {
+      className: "px-3 py-3.5 text-left text-sm font-semibold  ",
+    },
   },
   {
-    accessorKey: 'isPaid',
-    header: 'Paid',
+    accessorKey: "totalPrice",
+    header: "Total price",
+    meta: {
+      className: "px-3 py-3.5 text-left text-sm font-semibold  ",
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Date Placed",
+    meta: {
+      className:
+        "hidden px-3 py-3.5 text-left text-sm font-semibold lg:table-cell",
+    },
   },
 ];

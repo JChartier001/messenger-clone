@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { Item, FarmOrder } from '../types';
+import { create } from "zustand";
+import { Item, FarmOrder } from "../types";
 
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface CartState {
   order: FarmOrder[];
@@ -22,17 +22,17 @@ const useCart = create(
 
         // Safeguard for undefined farmId
         if (!data.farmId) {
-          console.error('No farmId provided for the item');
+          console.error("No farmId provided for the item");
           return;
         }
 
         const existingFarm = currentItems.find(
-          (order) => order.farmId === data.farmId
+          (order) => order.farmId === data.farmId,
         );
 
         if (existingFarm) {
           const existingItem = existingFarm.items.find(
-            (item) => item.id === data.id
+            (item) => item.id === data.id,
           );
 
           if (existingItem) {
@@ -48,11 +48,11 @@ const useCart = create(
                               quantity: (item.quantity || 0) + 1,
                               subtotal: ((item.quantity || 0) + 1) * data.price,
                             }
-                          : item
+                          : item,
                       ),
                       totalPrice: (order.totalPrice || 0) + data.price,
                     }
-                  : order
+                  : order,
               ),
             });
           } else {
@@ -71,7 +71,7 @@ const useCart = create(
                       ],
                       totalPrice: (order.totalPrice || 0) + data.price,
                     }
-                  : order
+                  : order,
               ),
             });
           }
@@ -99,13 +99,13 @@ const useCart = create(
 
         // Check if the farm order exists
         const existingFarm = currentItems.find(
-          (order) => order.farmId === data.farmId
+          (order) => order.farmId === data.farmId,
         );
 
         if (existingFarm) {
           // Check if the item exists in the farm order
           const existingItem = existingFarm.items.find(
-            (item) => item.id === data.id
+            (item) => item.id === data.id,
           );
 
           if (existingItem) {
@@ -119,16 +119,16 @@ const useCart = create(
                         items: order.items.map((item) =>
                           item.id === data.id
                             ? { ...item, quantity: item.quantity! - 1 }
-                            : item
+                            : item,
                         ),
                       }
-                    : order
+                    : order,
                 ),
               });
             } else {
               // Remove the item entirely from the farm order
               const updatedItems = existingFarm.items.filter(
-                (item) => item.id !== data.id
+                (item) => item.id !== data.id,
               );
 
               if (updatedItems.length > 0) {
@@ -139,13 +139,13 @@ const useCart = create(
                           ...order,
                           items: updatedItems,
                         }
-                      : order
+                      : order,
                   ),
                 });
               } else {
                 // If no items left in the farm order, remove the farm order
                 const updatedOrders = currentItems.filter(
-                  (order) => order.farmId !== data.farmId
+                  (order) => order.farmId !== data.farmId,
                 );
                 set({ order: updatedOrders });
               }
@@ -158,13 +158,13 @@ const useCart = create(
 
         // Check if the farm order exists
         const existingFarm = currentItems.find(
-          (order) => order.farmId === data.farmId
+          (order) => order.farmId === data.farmId,
         );
 
         if (existingFarm) {
           // Check if the item exists in the farm order
           const existingItem = existingFarm.items.find(
-            (item) => item.id === data.id
+            (item) => item.id === data.id,
           );
 
           if (existingItem && existingItem.quantity! > 0) {
@@ -177,17 +177,17 @@ const useCart = create(
                       items: order.items.map((item) =>
                         item.id === data.id
                           ? { ...item, quantity: item.quantity! - 1 }
-                          : item
+                          : item,
                       ),
                     }
-                  : order
+                  : order,
               ),
             });
 
             // If the item's quantity is 0 after decrement, remove the item
             if (existingItem.quantity! - 1 === 0) {
               const updatedItems = existingFarm.items.filter(
-                (item) => item.id !== data.id
+                (item) => item.id !== data.id,
               );
               set({
                 order: currentItems.map((order) =>
@@ -196,7 +196,7 @@ const useCart = create(
                         ...order,
                         items: updatedItems,
                       }
-                    : order
+                    : order,
                 ),
               });
             }
@@ -208,7 +208,7 @@ const useCart = create(
 
         // Remove all orders associated with the given farmId
         const updatedOrders = currentItems.filter(
-          (order) => order.farmId !== farmId
+          (order) => order.farmId !== farmId,
         );
 
         set({ order: updatedOrders });
@@ -217,10 +217,10 @@ const useCart = create(
       removeAll: () => set({ order: [] }),
     }),
     {
-      name: 'cart-storage',
+      name: "cart-storage",
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 
 export default useCart;

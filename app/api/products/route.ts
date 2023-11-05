@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-import prismadb from '@/app/libs/prismadb';
+import prismadb from "@/app/libs/prismadb";
 
 export async function GET(req: Request) {
   try {
@@ -15,7 +15,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(products);
   } catch (error) {
-    console.error('[PRODUCTS_GET]', error);
-    return new NextResponse('Internal error', { status: 500 });
+    console.error("[PRODUCTS_GET]", error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 }

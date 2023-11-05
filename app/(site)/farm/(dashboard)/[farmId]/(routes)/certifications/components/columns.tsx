@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef } from "@tanstack/react-table";
 
-import CellAction from './CellAction';
+import CellAction from "./CellAction";
 
 export type CertificationColumn = {
   id: string;
@@ -13,19 +13,19 @@ export type CertificationColumn = {
 
 export const columns: ColumnDef<CertificationColumn>[] = [
   {
-    accessorKey: 'name',
-    header: 'Name',
+    accessorKey: "name",
+    header: "Name",
   },
   {
-    accessorKey: 'approved',
-    header: 'Approved',
+    accessorKey: "approved",
+    header: "Approved",
   },
   {
-    accessorKey: 'createdAt',
-    header: 'Date',
+    accessorKey: "createdAt",
+    header: "Date",
   },
   {
-    id: 'actions',
+    id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];

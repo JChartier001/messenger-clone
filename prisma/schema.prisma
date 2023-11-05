@@ -21,7 +21,7 @@ model User {
   hashedPassword String?
   role           Role      @default(USER)
 
-  favoriteIds String? @db.ObjectId
+favoriteIds String? @db.ObjectId
   favorites Favorites?
 
   conversationIds String[]       @db.ObjectId
@@ -251,7 +251,7 @@ model Payment {
   status          String   @default("")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  orderId         String   @db.ObjectId
+  orderIds         String[]   @db.ObjectId
   paymentMethodId String
   paymentIntentId String
 
